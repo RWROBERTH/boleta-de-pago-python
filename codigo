@@ -1,0 +1,141 @@
+#funciones para ingresos
+def fbonos(anoantiguedad):
+    smn=2250
+    if anoantiguedad<2:
+        bonoantiguedad=3*smn*0
+        return bonoantiguedad
+    else:
+        if anoantiguedad>1 and anoantiguedad<5:
+            bonoantiguedad=3*smn*0.05
+            return bonoantiguedad
+        else:
+            if anoantiguedad>4 and anoantiguedad<8:
+                bonoantiguedad=3*smn*0.11
+                return bonoantiguedad
+            else:
+                if anoantiguedad>7 and anoantiguedad<11:
+                    bonoantiguedad=3*smn*0.18
+                    return bonoantiguedad
+                else:
+                    if anoantiguedad>10 and anoantiguedad<15:
+                        bonoantiguedad=3*smn*0.26
+                        return bonoantiguedad
+                    else:
+                        if anoantiguedad>14 and anoantiguedad<20:
+                            bonoantiguedad=3*smn*0.34
+                            return bonoantiguedad
+                        else:
+                            if anoantiguedad>19 and anoantiguedad<25:
+                                bonoantiguedad=3*smn*0.42
+                                return bonoantiguedad
+                            else:
+                                if anoantiguedad>=25:
+                                    bonoantiguedad=3*smn*0.50
+                                    return bonoantiguedad
+def porhora(horastrabajadas,sueldo):
+    sueldo_porhora=(sueldo/30)/horastrabajadas
+    sueldo_porhora=round(sueldo_porhora,2)
+    return sueldo_porhora
+def porhoraextra(horasextra,sueldo_porhora):
+    sueldo_porhoraextra= horasextra*porhora(horastrabajadas,sueldo)
+    sueldo_porhoraextra=round(sueldo_porhoraextra,2)
+    return sueldo_porhoraextra
+def porhoranocturna(sueldo_porhora):
+    sueldo_horasnocturnas=((porhora(horastrabajadas,sueldo)*0.25)+porhora(horastrabajadas,sueldo))*horasnocturnas                 
+    sueldo_horasnocturnas=round(sueldo_horasnocturnas,2)
+    return sueldo_horasnocturnas
+def bonoproduct(sueldo):
+    productividad=sueldo*0.01
+    productividad=round(productividad,2)
+    return productividad
+# total de ingresos
+def ingrestot(haberbasico,bonoantiguedad,sueldo_porhoraextra,sueldo_horasnocturnas,productividad):
+    totalde_ingresos=haberbasico+fbonos(anoantiguedad)+porhoraextra(horasextra,porhora(horastrabajadas,sueldo))+porhoranocturna(porhora(horastrabajadas,sueldo))+bonoproduct(sueldo)
+    totalde_ingresos=round(totalde_ingresos,2)
+    return totalde_ingresos
+# funcion de egresos
+def aportsolidario(sueldo):
+    if sueldo>12999 and sueldo<25000:
+        monto1=sueldo-13000
+        porcentaje1=monto1*0.01
+        aportesolidario=porcentaje1
+        return aportesolidario
+    else:
+        if sueldo>24999 and sueldo<35001:
+            monto1=sueldo-13000
+            monto2=sueldo-25000
+            porcentaje1=monto1*0.01
+            porcentaje2=monto2*0.05
+            aportesolidario=porcentaje1+porcentaje2
+            return aportesolidario
+        else:
+            if sueldo>35000:
+                monto1=sueldo-13000
+                monto2=sueldo-25000
+                monto3=sueldo-35000
+                porcentaje1=monto1*0.01
+                porcentaje2=monto2*0.05
+                porcentaje3=monto3*0.10
+                aportesolidario=porcentaje1+porcentaje2+porcentaje3
+                return aportesolidario
+            else:
+                if sueldo<13000:
+                    aportesolidario=0
+                    return aportesolidario
+def rciva(facturas,sueldo):
+    if facturas>sueldo:
+        rc_iva=0
+        return rc_iva
+    else:
+        rc_iva=(sueldo-facturas)*0.13
+        return rc_iva
+def afp(sueldo):
+    afps=0.1271
+    descuento_afps=sueldo*afps
+    return descuento_afps
+# total de egresos
+def tot_egresos(aportesolidario,rc_iva,descuento_afps,multas,otros_descuentos):
+    totalde_egresos=aportsolidario(sueldo)+rciva(facturas,sueldo)+afp(sueldo)+multas+otros_descuentos
+    return totalde_egresos
+# cambios
+multas=0
+otros_descuentos=0
+# inicio de algoritmo
+print("BOLETA DE PAGO")                        
+nombrecompleto=input("Escriba su nombre ")
+carnet=int(input("Escriba su Carnet de Identidad "))
+cargo=input("Escriba su cargo asignado ")
+horastrabajadas=int(input("Escriba sus horas trabajadas al dia "))
+horasextra=int(input("Escriba sus horas extra trabajadas "))
+horasnocturnas=int(input("Escriba sus horas nocturnas trabajadas "))
+mespago=input("Escriba el Mes de pago ")
+sueldo=float(input("Escribir el monto de sueldo en bolivianos "))
+haberbasico=sueldo
+anoantiguedad=int(input("Escribe tus años de antiguedad "))
+facturas=float(input("Escribe el monto de facturas "))
+# operaciones
+total_deingresos=ingrestot(haberbasico,fbonos(anoantiguedad),porhoraextra(horasextra,porhora(horastrabajadas,sueldo)),porhoranocturna(porhora(horastrabajadas,sueldo)),bonoproduct(sueldo))
+total_deegresos=tot_egresos(aportsolidario(sueldo),rciva(facturas,sueldo),afp(sueldo),multas,otros_descuentos)
+liquidopagable=total_deingresos-total_deegresos
+# por hora
+print("Haber Basico por hora: ", porhora(horastrabajadas,sueldo)," (no cuenta en el Ingreso total)")
+print("")
+# ingresos
+print("Ingresos")
+print("Haber basico: ",haberbasico)
+print("Bono de Antiguedad: ",fbonos(anoantiguedad))
+print("Horas extra: ",porhoraextra(horasextra,porhora(horastrabajadas,sueldo)))
+print("Horas Nocturnas: ",porhoranocturna(porhora(horastrabajadas,sueldo)))
+print("Productividad: ",bonoproduct(sueldo))
+print("Total de Ingresos:",ingrestot(haberbasico,fbonos(anoantiguedad),porhoraextra(horasextra,porhora(horastrabajadas,sueldo)),porhoranocturna(porhora(horastrabajadas,sueldo)),bonoproduct(sueldo)))
+print("")
+#egresos
+print("Egresos")
+print("AFPS: ",afp(sueldo))
+print("Aporte Solidario: ",aportsolidario(sueldo))
+print("RC-IVA: ",rciva(facturas,sueldo))
+print("Multas: ",multas)
+print("Otros Descuentos: ",otros_descuentos)
+print("Total de Egresos:",tot_egresos(aportsolidario(sueldo),rciva(facturas,sueldo),afp(sueldo),multas,otros_descuentos))
+print("")
+print("Liquido Pagable: ",liquidopagable)
