@@ -37,22 +37,17 @@ def porhora(horastrabajadas,sueldo):
     sueldo_porhora=round(sueldo_porhora,2)
     return sueldo_porhora
 def porhoraextra(horasextra,sueldo_porhora):
-    sueldo_porhoraextra= horasextra*porhora(horastrabajadas,sueldo)
+    sueldo_porhoraextra= horasextra*sueldo_porhora
     sueldo_porhoraextra=round(sueldo_porhoraextra,2)
     return sueldo_porhoraextra
-def porhoranocturna(sueldo_porhora):
-    sueldo_horasnocturnas=((porhora(horastrabajadas,sueldo)*0.25)+porhora(horastrabajadas,sueldo))*horasnocturnas                 
+def porhoranocturna(sueldo_porhora,horasnocturnas):
+    sueldo_horasnocturnas=((sueldo_porhora*0.25)+sueldo_porhora)*horasnocturnas                 
     sueldo_horasnocturnas=round(sueldo_horasnocturnas,2)
     return sueldo_horasnocturnas
 def bonoproduct(sueldo):
     productividad=sueldo*0.01
     productividad=round(productividad,2)
     return productividad
-# total de ingresos
-def ingrestot(haberbasico,bonoantiguedad,sueldo_porhoraextra,sueldo_horasnocturnas,productividad):
-    totalde_ingresos=haberbasico+fbonos(anoantiguedad)+porhoraextra(horasextra,porhora(horastrabajadas,sueldo))+porhoranocturna(porhora(horastrabajadas,sueldo))+bonoproduct(sueldo)
-    totalde_ingresos=round(totalde_ingresos,2)
-    return totalde_ingresos
 # funcion de egresos
 def aportsolidario(sueldo):
     if sueldo>12999 and sueldo<25000:
@@ -92,14 +87,25 @@ def rciva(facturas,sueldo):
 def afp(sueldo):
     afps=0.1271
     descuento_afps=sueldo*afps
+    descuento_afps=round(descuento_afps,2)
     return descuento_afps
+def mul(multas):
+    from random import randint
+    multas=randint(0,500)
+    return multas
+def des(otros_descuentos):
+    from random import randint
+    otros_descuentos=randint(0,600)
+    return otros_descuentos
+# total de ingresos
+def ingres(haberbasico,bonoantiguedad,sueldo_porhoraextra,sueldo_horasnocturnas,productividad):
+    ingresos=haberbasico+bonoantiguedad+sueldo_porhoraextra+sueldo_horasnocturnas+productividad
+    return ingresos
 # total de egresos
-def tot_egresos(aportesolidario,rc_iva,descuento_afps,multas,otros_descuentos):
-    totalde_egresos=aportsolidario(sueldo)+rciva(facturas,sueldo)+afp(sueldo)+multas+otros_descuentos
-    return totalde_egresos
-# cambios
-multas=0
-otros_descuentos=0
+def egres(descuento_afps,aportesolidario,rc_iva,multas,otros_descuentos):
+    egresos=descuento_afps+aportesolidario+rc_iva+multas+otros_descuentos
+    egresos=round(egresos,2)
+    return egresos
 # inicio de algoritmo
 print("BOLETA DE PAGO")                        
 nombrecompleto=input("Escriba su nombre ")
@@ -114,28 +120,39 @@ haberbasico=sueldo
 anoantiguedad=int(input("Escribe tus años de antiguedad "))
 facturas=float(input("Escribe el monto de facturas "))
 # operaciones
-total_deingresos=ingrestot(haberbasico,fbonos(anoantiguedad),porhoraextra(horasextra,porhora(horastrabajadas,sueldo)),porhoranocturna(porhora(horastrabajadas,sueldo)),bonoproduct(sueldo))
-total_deegresos=tot_egresos(aportsolidario(sueldo),rciva(facturas,sueldo),afp(sueldo),multas,otros_descuentos)
-liquidopagable=total_deingresos-total_deegresos
-# por hora
+bonoantiguedad=fbonos(anoantiguedad)
+sueldo_porhora=porhora(horastrabajadas,sueldo)
+sueldo_porhoraextra=porhoraextra(horasextra,sueldo_porhora)
+sueldo_horasnocturnas=porhoranocturna(sueldo_porhora,horasnocturnas)
+productividad=bonoproduct(sueldo)
+descuento_afps=afp(sueldo)
+aportesolidario=aportsolidario(sueldo)
+rc_iva=rciva(facturas,sueldo)
+multas=0
+multas=mul(multas)
+otros_descuentos=0
+otros_descuentos=des(otros_descuentos)
+ingresos=ingres(haberbasico,bonoantiguedad,sueldo_porhoraextra,sueldo_horasnocturnas,productividad)
+egresos=egres(descuento_afps,aportesolidario,rc_iva,multas,otros_descuentos)
+liquido=ingresos-egresos
+#datos
 print("Haber Basico por hora: ", porhora(horastrabajadas,sueldo)," (no cuenta en el Ingreso total)")
 print("")
-# ingresos
 print("Ingresos")
 print("Haber basico: ",haberbasico)
-print("Bono de Antiguedad: ",fbonos(anoantiguedad))
-print("Horas extra: ",porhoraextra(horasextra,porhora(horastrabajadas,sueldo)))
-print("Horas Nocturnas: ",porhoranocturna(porhora(horastrabajadas,sueldo)))
-print("Productividad: ",bonoproduct(sueldo))
-print("Total de Ingresos:",ingrestot(haberbasico,fbonos(anoantiguedad),porhoraextra(horasextra,porhora(horastrabajadas,sueldo)),porhoranocturna(porhora(horastrabajadas,sueldo)),bonoproduct(sueldo)))
+print("Bono de Antiguedad: ",bonoantiguedad)
+print("Horas extra: ",sueldo_porhoraextra)
+print("Horas Nocturnas: ",sueldo_horasnocturnas)
+print("Productividad: ",productividad)
+print("Total de Ingresos:",ingresos)
 print("")
 #egresos
 print("Egresos")
-print("AFPS: ",afp(sueldo))
-print("Aporte Solidario: ",aportsolidario(sueldo))
-print("RC-IVA: ",rciva(facturas,sueldo))
+print("AFPS: ",descuento_afps)
+print("Aporte Solidario: ",aportesolidario)
+print("RC-IVA: ",rc_iva)
 print("Multas: ",multas)
 print("Otros Descuentos: ",otros_descuentos)
-print("Total de Egresos:",tot_egresos(aportsolidario(sueldo),rciva(facturas,sueldo),afp(sueldo),multas,otros_descuentos))
+print("Total de Egresos:",egresos)
 print("")
-print("Liquido Pagable: ",liquidopagable)
+print("Liquido Pagable: ",liquido)
